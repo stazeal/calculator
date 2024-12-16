@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <style name="CalculatorButton">
+        <!-- Size and layout -->
+        <item name="android:layout_width">75dp</item>
+        <item name="android:layout_height">75dp</item>
+        <item name="android:layout_margin">8dp</item> <!-- Reduced margin for more compact design -->
+        <item name="android:layout_rowWeight">1</item>
+        <item name="android:layout_columnWeight">1</item>
+
+        <!-- Text styling -->
+        <item name="android:textSize">22sp</item> <!-- Increased text size for better readability -->
+        <item name="android:textColor">#FFFFFF</item> <!-- White text for contrast -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item> <!-- Text centered inside the button -->
+
+        <!-- Padding and background -->
+        <item name="android:padding">12dp</item> <!-- Slightly more padding for touch area -->
+        <item name="android:background">?android:attr/selectableItemBackground</item> <!-- Use default material ripple background -->
+
+        <!-- Visual tweaks -->
+        <item name="android:elevation">2dp</item> <!-- Adds a small shadow effect for better depth -->
+        <item name="android:focusable">true</item> <!-- Makes the button focusable -->
+        <item name="android:clickable">true</item> <!-- Makes the button clickable -->
+
+    </style>
+</resources>
+
+
