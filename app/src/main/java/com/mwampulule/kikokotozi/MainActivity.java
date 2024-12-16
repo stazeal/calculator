@@ -9,14 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    double firstnum;
-    String operation;
+    private double firstNum = 0;
+    private String operation = null;
+    private boolean isNewInput = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Number buttons
         Button num0 = findViewById(R.id.num0);
         Button num1 = findViewById(R.id.num1);
         Button num2 = findViewById(R.id.num2);
@@ -28,101 +30,119 @@ public class MainActivity extends AppCompatActivity {
         Button num8 = findViewById(R.id.num8);
         Button num9 = findViewById(R.id.num9);
 
-        Button on = findViewById(R.id.on);
-        Button off = findViewById(R.id.off);
-        Button ac = findViewById(R.id.clear);
-        Button del = findViewById(R.id.del);
+        // Operation buttons
+        Button add = findViewById(R.id.add);
         Button subs = findViewById(R.id.subtract);
         Button divide = findViewById(R.id.divide);
         Button multiply = findViewById(R.id.multiply);
-        Button add = findViewById(R.id.add);
         Button equals = findViewById(R.id.equals);
+        Button ac = findViewById(R.id.clear);
+        Button del = findViewById(R.id.del);
         Button point = findViewById(R.id.decimal);
+        Button on = findViewById(R.id.on);
+        Button off = findViewById(R.id.off);
 
         TextView screen = findViewById(R.id.screen);
 
+        // Clear Screen
         ac.setOnClickListener(view -> {
-            firstnum = 0;
+            firstNum = 0;
+            operation = null;
             screen.setText("0");
+            isNewInput = true;
         });
 
+        // Turn OFF and ON
         off.setOnClickListener(view -> screen.setVisibility(View.GONE));
         on.setOnClickListener(view -> {
             screen.setVisibility(View.VISIBLE);
             screen.setText("0");
+            isNewInput = true;
         });
 
-        ArrayList<Button> nums = new ArrayList<>();
-        nums.add(num0);
-        nums.add(num1);
-        nums.add(num2);
-        nums.add(num3);
-        nums.add(num4);
-        nums.add(num5);
-        nums.add(num6);
-        nums.add(num7);
-        nums.add(num8);
-        nums.add(num9);
+        // Numeric Buttons
+        View.OnClickListener numberClickListener = view -> {
+            String currentText = screen.getText().toString();
+            String number = ((Button) view).getText().toString();
 
-        for (Button b : nums) {
-            b.setOnClickListener(view -> {
-                if (!screen.getText().toString().equals("0")) {
-                    screen.setText(screen.getText().toString() + b.getText());
-                } else {
-                    screen.setText(b.getText().toString());
-                }
-            });
-        }
-
-        ArrayList<Button> opers = new ArrayList<>();
-        opers.add(divide);
-        opers.add(multiply);
-        opers.add(subs); // Corrected from 'substract' to 'subs'
-
-        for (Button b : opers) {
-            b.setOnClickListener(view -> {
-                firstnum = Double.parseDouble(screen.getText().toString());
-                operation = b.getText().toString();
-                screen.setText("0");
-            });
-        }
-
-        del.setOnClickListener(view -> {
-            String num = screen.getText().toString();
-            if (num.length() > 1) {
-                screen.setText(num.substring(0, num.length() - 1));
-            } else if (num.length() == 1 && !num.equals("0")) {
-                screen.setText("0");
+            if (isNewInput || currentText.equals("0")) {
+                screen.setText(number);
+            } else {
+                screen.setText(currentText + number);
             }
-        });
+            isNewInput = false;
+        };
 
+        num0.setOnClickListener(numberClickListener);
+        num1.setOnClickListener(numberClickListener);
+        num2.setOnClickListener(numberClickListener);
+        num3.setOnClickListener(numberClickListener);
+        num4.setOnClickListener(numberClickListener);
+        num5.setOnClickListener(numberClickListener);
+        num6.setOnClickListener(numberClickListener);
+        num7.setOnClickListener(numberClickListener);
+        num8.setOnClickListener(numberClickListener);
+        num9.setOnClickListener(numberClickListener);
+
+        // Decimal Point
         point.setOnClickListener(view -> {
-            if (!screen.getText().toString().contains(".")) {
-                screen.setText(screen.getText().toString() + ".");
+            String currentText = screen.getText().toString();
+            if (!currentText.contains(".")) {
+                screen.setText(currentText + ".");
             }
         });
 
+        // Delete Last Character
+        del.setOnClickListener(view -> {
+            String currentText = screen.getText().toString();
+            if (currentText.length() > 1) {
+                screen.setText(currentText.substring(0, currentText.length() - 1));
+            } else {
+                screen.setText("0");
+                isNewInput = true;
+            }
+        });
+
+        // Operation Buttons
+        View.OnClickListener operationClickListener = view -> {
+            firstNum = Double.parseDouble(screen.getText().toString());
+            operation = ((Button) view).getText().toString();
+            isNewInput = true;
+        };
+
+        add.setOnClickListener(operationClickListener);
+        subs.setOnClickListener(operationClickListener);
+        divide.setOnClickListener(operationClickListener);
+        multiply.setOnClickListener(operationClickListener);
+
+        // Equals Button
         equals.setOnClickListener(view -> {
+            if (operation == null) return;
+
             double secondNum = Double.parseDouble(screen.getText().toString());
-            double result;
+            double result = 0;
+
             switch (operation) {
-                case "/":
-                    result = firstnum / secondNum;
-                    break;
-                case "X":
-                    result = firstnum * secondNum;
-                    break;
                 case "+":
-                    result = firstnum + secondNum;
+                    result = firstNum + secondNum;
                     break;
                 case "-":
-                    result = firstnum - secondNum;
+                    result = firstNum - secondNum;
                     break;
-                default:
-                    result = firstnum + secondNum;
+                case "/":
+
+                        result = firstNum / secondNum;
+
+                    break;
+                case "x":
+                    result = firstNum * secondNum;
+                    break;
             }
-            screen.setText(String.valueOf(result)); // Ensuring result is converted to String
-            firstnum = result;
+
+            screen.setText(String.valueOf(result));
+            firstNum = result; // Save result for further calculations
+            isNewInput = true;
+            operation = null;
         });
     }
 }

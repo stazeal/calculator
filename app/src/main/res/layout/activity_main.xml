@@ -171,8 +171,9 @@
 
             <Button
                 android:id="@+id/add"
+                style="@style/Button1"
                 android:text="+"
-                style="@style/Button1" />
+                android:textColor="@color/black" />
 
             <Button
                 android:id="@+id/equals"
